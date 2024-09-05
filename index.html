@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Music Website</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1c1c1c;
+            color: #fff;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            background-color: #5323a1;
+            width: 300px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .profile-section {
+            text-align: center;
+        }
+
+        .profile-img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+        }
+
+        .discography {
+            margin-top: 50px;
+        }
+
+        .album {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .album-cover {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background-color: #2c2c2c;
+        }
+
+        .album-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .audio-player {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .album-art {
+            width: 120px;
+            height: 120px;
+            margin-right: 20px;
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .about-section {
+            margin-top: 30px;
+        }
+
+        .comments-section {
+            margin-top: 20px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #444;
+            border: none;
+            color: #fff;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5323a1;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #6a3bd1;
+        }
+/* 
+        #visual-parameters {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            color: #fff;
+            z-index: 1000;
+        } */
+
+        .visual-parameter-display {
+            font-size: 16px;
+        }
+
+        .visual-parameter-display h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        .parameter {
+            margin: 5px 0;
+        }
+
+        .music-parameters {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #3c3c3c;
+            border-radius: 8px;
+        }
+
+        .music-parameters h3 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .music-parameters .parameter {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        #visual-parameters {
+            margin-top: 30px;
+        }
+
+        .visual-parameters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .parameter {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        canvas {
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="profile-section">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAd5avdba8EiOZH8lmV3XshrXx7dKRZvhx-A&s"
+                    alt="Profile" class="profile-img">
+                <h2>Your Name</h2>
+                <p>Author description</p>
+            </div>
+            <div class="discography">
+                <h3>Discography</h3>
+                <div class="album">
+                    <img src="https://png.pngtree.com/png-vector/20191126/ourmid/pngtree-love-song-icon-png-image_2036603.jpg"
+                        alt="Example Album" class="album-cover">
+                    <div>
+                        <h4>Example Album</h4>
+                        <p>July 1, 2018</p>
+                        <p>1 track</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <p>Proudly Powered by Cosmic JS</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="album-details">
+                <h2>Example Album</h2>
+                <p>Released July 1, 2018</p>
+                <div class="audio-player">
+                    <img src="https://png.pngtree.com/png-vector/20191126/ourmid/pngtree-love-song-icon-png-image_2036603.jpg"
+                        alt="Album Art" class="album-art">
+                    <div class="audio-info">
+                        <h3>Demo Track</h3>
+                        <p>by Your Name</p>
+                        <audio controls>
+                            <source src="h.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+            </div>
+            
+                <section id="visual-parameters">
+                    <h3>Music Visual Parameters</h3>
+                    <div class="visual-parameters-grid">
+                        <div class="parameter">
+                            <canvas id="volume-chart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="parameter">
+                            <canvas id="frequency-chart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="parameter">
+                            <canvas id="amplitude-chart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="parameter">
+                            <canvas id="rhythm-chart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="parameter">
+                            <canvas id="melody-chart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="parameter">
+                            <canvas id="harmonic-structure-chart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="parameter">
+                            <canvas id="timbre-chart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="parameter">
+                            <canvas id="tempo-chart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </section>
+                
+
+
+            <div class="about-section">
+                <h3>About</h3>
+                <p>This is an example album. You can edit it in your Cosmic JS bucket dashboard.</p>
+
+                <h3>Comments</h3>
+                <div class="comments-section">
+                    <p><strong>Kate</strong> 21:59 July 30</p>
+                    <p>First comment :</p>
+
+                    <form>
+                        <input type="text" name="name" placeholder="Your name">
+                        <textarea name="comment" placeholder="Leave your comment"></textarea>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const audioElement = document.querySelector('audio');
+        
+        // Set up audio context and analyzer
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        const source = audioContext.createMediaElementSource(audioElement);
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+        analyser.fftSize = 2048;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        // Create sine wave charts with unique colors
+        const volumeChart = createSineWaveChart('volume-chart', 'Volume', 'rgba(255, 159, 64, 1)');  // Orange
+        const frequencyChart = createSineWaveChart('frequency-chart', 'Frequency', 'rgba(54, 162, 235, 1)');  // Blue
+        const amplitudeChart = createSineWaveChart('amplitude-chart', 'Amplitude', 'rgba(75, 192, 192, 1)');  // Teal
+        const rhythmChart = createSineWaveChart('rhythm-chart', 'Rhythm', 'rgba(153, 102, 255, 1)');  // Purple
+        const melodyChart = createSineWaveChart('melody-chart', 'Melody', 'rgba(255, 206, 86, 1)');  // Yellow
+        const harmonicStructureChart = createSineWaveChart('harmonic-structure-chart', 'Harmonic Structure', 'rgba(255, 99, 132, 1)');  // Red
+        const timbreChart = createSineWaveChart('timbre-chart', 'Timbre', 'rgba(75, 192, 255, 1)');  // Light Blue
+        const tempoChart = createSineWaveChart('tempo-chart', 'Tempo', 'rgba(255, 99, 255, 1)');  // Pink
+
+        function createSineWaveChart(canvasId, label, borderColor) {
+            return new Chart(document.getElementById(canvasId), {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: 100 }, (_, i) => i), // X-axis with 100 points
+                    datasets: [{
+                        label: label,
+                        data: Array.from({ length: 100 }, () => 0), // Initial data is zero
+                        borderColor: borderColor,
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4 // Curved line for sine wave
+                    }]
+                },
+                options: {
+                    animation: {
+                        duration: 0 // Disable animation to make updates immediate
+                    },
+                    scales: {
+                        x: {
+                            display: false // Hide X-axis
+                        },
+                        y: {
+                            min: -100,
+                            max: 100 // Adjust Y-axis to show the sine wave
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSineWaveChart(chart, amplitude, frequency) {
+            const newData = chart.data.datasets[0].data.map((_, i) => {
+                // Generate sine wave data points
+                const sineValue = amplitude * Math.sin((i / 10) * frequency); // sine function
+                return sineValue;
+            });
+
+            // Update chart data with new sine wave points
+            chart.data.datasets[0].data = newData;
+            chart.update();
+        }
+
+        function updateParameters() {
+            analyser.getByteFrequencyData(dataArray);
+
+            // Calculate volume (average amplitude)
+            const sum = dataArray.reduce((a, b) => a + b, 0);
+            const average = sum / dataArray.length;
+
+            // Calculate frequency (peak frequency)
+            const maxIndex = dataArray.indexOf(Math.max(...dataArray));
+            const frequency = maxIndex * audioContext.sampleRate / analyser.fftSize;
+
+            // Update sine wave charts with amplitude and frequency data
+            updateSineWaveChart(volumeChart, average / 2, 0.1);  // Volume affects amplitude
+            updateSineWaveChart(frequencyChart, 50, frequency / 100); // Frequency changes frequency
+            updateSineWaveChart(amplitudeChart, average / 3, 0.15);
+            updateSineWaveChart(rhythmChart, 40, 0.12);  // Simulated values for rhythm
+            updateSineWaveChart(melodyChart, 60, 0.2);  // Simulated values for melody
+            updateSineWaveChart(harmonicStructureChart, 30, 0.25);  // Simulated harmonic structure
+            updateSineWaveChart(timbreChart, 70, 0.18);  // Simulated timbre
+            updateSineWaveChart(tempoChart, 50, 0.22);  // Simulated tempo
+        }
+
+        // Update parameters every 100 milliseconds
+        setInterval(updateParameters, 100);
+    });
+</script>
+
+
+
+</html>
